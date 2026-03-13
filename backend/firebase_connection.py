@@ -10,18 +10,37 @@ Database structure:
 
 Usage:
     from firebase_connection import get_latest_health_data, verify_user
+
+Configuration (via environment variables or .env):
+    FIREBASE_KEY_PATH  — path to the service-account JSON key file
+                         (defaults to firebase_key.json in the project root)
+    FIREBASE_DB_URL    — Realtime Database URL
+                         (defaults to the project-default URL when unset)
 """
 
 import os
 
+from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, db as firebase_db
+
+# Load .env so environment variables are available when running directly
+load_dotenv()
 
 # ---------------------------------------------------------------------------
 # Initialise Firebase Admin SDK (runs once on import)
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-_KEY_PATH = os.path.join(_PROJECT_ROOT, 'firebase_key.json')
+
+_KEY_PATH = os.environ.get(
+    'FIREBASE_KEY_PATH',
+    os.path.join(_PROJECT_ROOT, 'firebase_key.json'),
+)
+
+_DB_URL = os.environ.get(
+    'FIREBASE_DB_URL',
+    'https://habitcheckapp-2ee93-default-rtdb.firebaseio.com/',
+)
 
 LOCAL_USER_DATA = {
     '6a804b1ecaa99679': {
@@ -43,7 +62,7 @@ if not firebase_admin._apps:
     try:
         _cred = credentials.Certificate(_KEY_PATH)
         firebase_admin.initialize_app(_cred, {
-            'databaseURL': 'https://habitcheckapp-2ee93-default-rtdb.firebaseio.com/'
+            'databaseURL': _DB_URL
         })
     except Exception as exc:
         _firebase_init_error = exc

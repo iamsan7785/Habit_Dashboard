@@ -5,8 +5,9 @@
 __pycache__/
 *.py[cod]
 
-# Local secrets
+# Local secrets — never commit these
 firebase_key.json
+.env
 
 # Virtual environments
 .venv/
