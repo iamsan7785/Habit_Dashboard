@@ -9,11 +9,17 @@ Standalone Flask application that:
  4. Serves a dashboard with prediction options
  5. Serves prediction pages with inputs auto-filled from Firebase
  6. Exposes JSON prediction endpoints consumed by the frontend
+ 7. Supports cross-origin requests (CORS) for Lovable / React frontends
 
 Run:
     cd backend
     pip install -r ../ml_requirements.txt
     python ml_api.py
+
+Environment variables (see .env.example):
+    FLASK_SECRET_KEY  — secret key for session signing
+    CORS_ORIGINS      — comma-separated allowed origins (default: *)
+    FLASK_ENV         — "development" | "production"
 
 Flow:
     http://127.0.0.1:5000/           → Landing home page
@@ -29,7 +35,13 @@ import os
 import sys
 from datetime import datetime
 from functools import wraps
+
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
+from flask_cors import CORS
+
+# Load .env before anything else so all os.environ reads see the values
+load_dotenv()
 
 # ---------------------------------------------------------------------------
 # Path setup — templates & static live one level above backend/
@@ -71,7 +83,37 @@ app = Flask(
     template_folder=os.path.join(_PROJECT_ROOT, 'templates'),
     static_folder=os.path.join(_PROJECT_ROOT, 'static'),
 )
-app.secret_key = 'habit_dashboard_secret_key_2026'
+_secret_key = os.environ.get('FLASK_SECRET_KEY')
+if not _secret_key:
+    if os.environ.get('FLASK_ENV', 'development').lower() == 'production':
+        raise RuntimeError(
+            'FLASK_SECRET_KEY must be set in production. '
+            'Generate one with: python -c "import secrets; print(secrets.token_hex(32))"'
+        )
+    # Development fallback — insecure, only acceptable locally
+    _secret_key = 'habit_dashboard_secret_key_2026'
+app.secret_key = _secret_key
+
+# ---------------------------------------------------------------------------
+# CORS — allow requests from Lovable / React frontends
+# Set CORS_ORIGINS in .env as a comma-separated list of allowed origins.
+# Use * only for local development; always specify explicit origins in production.
+# ---------------------------------------------------------------------------
+_cors_origins_env = os.environ.get('CORS_ORIGINS', '').strip()
+if _cors_origins_env == '*':
+    _cors_origins: list | str = '*'
+elif _cors_origins_env:
+    _cors_origins = [o.strip() for o in _cors_origins_env.split(',') if o.strip()]
+else:
+    # No CORS_ORIGINS set — fail fast in production, open in development
+    if os.environ.get('FLASK_ENV', 'development').lower() == 'production':
+        raise RuntimeError(
+            'CORS_ORIGINS must be set in production to restrict cross-origin access. '
+            'Set it to a comma-separated list of allowed origins, e.g.: '
+            'CORS_ORIGINS=https://your-app.lovable.app'
+        )
+    _cors_origins = '*'
+CORS(app, origins=_cors_origins, supports_credentials=True)
 
 
 # ============================================================================
