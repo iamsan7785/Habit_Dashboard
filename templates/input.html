@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Confirm or Edit Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+        /* back button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+            z-index: 100;
+        }
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+        /* title section */
+        .title-section {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .title-section h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            color: #00c9a7;
+        }
+        .title-section p {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+        /* form container */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: #333;
+        }
+        /* form styling */
+        form .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        form label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+        form input[type="number"],
+        form input[type="text"] {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+        }
+        /* fieldset group styling */
+        fieldset.form-group {
+            border: 1px solid #ddd;
+            padding: 20px 15px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        fieldset.form-group legend {
+            padding: 0 5px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        /* read-only inputs appear slightly muted */
+        input[readonly] {
+            background: #f5f5f5;
+            color: #333;
+        }
+        form input[type="number"]:focus,
+        form input[type="text"]:focus {
+            outline: none;
+            border-color: #00c9a7;
+            box-shadow: 0 0 8px rgba(0, 201, 167, 0.2);
+        }
+        .checkbox-row {
+            background: #f5f5f5;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .checkbox-row label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .checkbox-row input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+        /* error box */
+        .error-box {
+            background: #ffe6e6;
+            color: #c33;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b6b;
+            font-size: 14px;
+        }
+        /* button */
+        .submit-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: #00c9a7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: #00a885;
+            box-shadow: 0 5px 15px rgba(0, 201, 167, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- back button -->
+    <button class="back-button" onclick="window.location.href='/'">← Back to Home</button>
+
+    <!-- title section -->
+    <div class="title-section">
+        <h1>AI Habit & Health</h1>
+        <p>Review & Modify Data</p>
+    </div>
+
+    <!-- form container -->
+    <div class="form-container">
+        {% if error %}
+        <div class="error-box">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/predict" method="post" target="_self">
+            <!-- hidden fields -->
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <input type="hidden" name="previous_drift" value="{{ previous_drift }}">
+
+            <!-- checkbox for auto-fetched values -->
+            <div class="checkbox-row">
+                <label>
+                    <input type="checkbox" name="use_fetched" checked>
+                    Use auto‑fetched values (uncheck to enter new numbers)
+                </label>
+            </div>
+
+            <!-- sleep hours -->
+            <div class="form-group">
+                <label for="sleep">Sleep Hours</label>
+                <input type="number" id="sleep" step="0.1" name="sleep" value="{{ sleep }}" required>
+            </div>
+
+            <!-- caffeine -->
+            <div class="form-group">
+                <label for="caffeine">Caffeine Intake (cups)</label>
+                <input type="number" id="caffeine" step="0.1" name="caffeine" value="{{ caffeine or 2 }}" required>
+            </div>
+
+            <!-- stress level -->
+            <div class="form-group">
+                <label for="stress_level">Stress Level (1-10)</label>
+                <input type="number" id="stress_level" step="0.1" min="1" max="10" name="stress_level" value="{{ stress_level or 5 }}" required>
+            </div>
+
+            <!-- steps -->
+            <div class="form-group">
+                <label for="steps">Step Count</label>
+                <input type="number" id="steps" name="steps" value="{{ steps }}" required>
+            </div>
+
+            <!-- calories -->
+            <div class="form-group">
+                <label for="calories">Calories Burned</label>
+                <input type="number" id="calories" name="calories" value="{{ calories }}" required>
+            </div>
+
+            <!-- screen time -->
+            <div class="form-group">
+                <label for="screen">Screen Time (Hours)</label>
+                <input type="number" id="screen" step="0.1" name="screen" value="{{ screen }}" required>
+            </div>
+
+            <!-- checkbox to toggle social section -->
+            <div class="checkbox-row">
+                <label>
+                    <input type="checkbox" id="social_used">
+                    Social Media Used Today
+                </label>
+            </div>
+
+            <!-- social media apps -->
+            <fieldset class="form-group" id="social_section" style="display:none">
+                <legend>Social Media Apps</legend>
+                <!-- each app now has hours + minutes, plus a hidden total field -->
+                <div class="form-group">
+                    <label>Instagram</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="instagram_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="instagram_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="instagram" id="instagram_total" value="{{ instagram or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="whatsapp_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="whatsapp_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="whatsapp" id="whatsapp_total" value="{{ whatsapp or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Facebook</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="facebook_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="facebook_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="facebook" id="facebook_total" value="{{ facebook or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Twitter/X</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="twitter_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="twitter_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="twitter" id="twitter_total" value="{{ twitter or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="social_total">Total Social Media Usage (Hours)</label>
+                    <input type="text" id="social_total" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="social_percent">Social % of Screen Time</label>
+                    <input type="text" id="social_percent" readonly>
+                </div>
+            </fieldset>
+
+            <!-- checkbox to toggle gaming section -->
+            <div class="checkbox-row">
+                <label>
+                    <input type="checkbox" id="game_used">
+                    Gaming Used Today
+                </label>
+            </div>
+
+            <!-- gaming apps -->
+            <fieldset class="form-group" id="game_section" style="display:none">
+                <legend>Gaming Apps</legend>
+                <div class="form-group">
+                    <label>PUBG</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="pubg_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="pubg_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="pubg" id="pubg_total" value="{{ pubg or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Free Fire</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="freefire_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="freefire_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="freefire" id="freefire_total" value="{{ freefire or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Call of Duty</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="cod_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="cod_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="cod" id="cod_total" value="{{ cod or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Other Games</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="number" id="othergames_hours" min="0" step="1" placeholder="Hours">
+                        <input type="number" id="othergames_mins" min="0" step="1" placeholder="Minutes">
+                        <input type="hidden" name="othergames" id="othergames_total" value="{{ othergames or 0 }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="gaming_total">Total Gaming Usage (Hours)</label>
+                    <input type="text" id="gaming_total" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="gaming_percent">Gaming % of Screen Time</label>
+                    <input type="text" id="gaming_percent" readonly>
+                </div>
+            </fieldset>
+
+            <!-- phone unlocks -->
+            <div class="form-group">
+                <label for="unlocks">Phone Unlock Count</label>
+                <input type="number" id="unlocks" name="unlocks" value="{{ unlocks }}" required>
+            </div>
+
+            <!-- exercise -->
+            <div class="form-group">
+                <label for="exercise">Exercise Minutes</label>
+                <input type="number" id="exercise" name="exercise" value="{{ exercise }}" required>
+            </div>
+
+            <!-- activity -->
+            <div class="form-group">
+                <label for="activity">Recent Activity Score (1-10)</label>
+                <input type="number" id="activity" step="0.1" name="activity" value="{{ activity }}" required>
+            </div>
+
+            <!-- social -->
+            <div class="form-group">
+                <label for="social">Social Interaction Score (1-10)</label>
+                <input type="number" id="social" step="0.1" name="social" value="{{ social }}" required>
+            </div>
+
+            <!-- submit button -->
+            <button type="submit" class="submit-btn">Run Predictions</button>
+        </form>
+
+    <!-- calculation and toggle script -->
+    <script>
+        function getVal(id) {
+            const el = document.getElementById(id);
+            const v = parseFloat(el.value);
+            return isNaN(v) ? 0 : v;
+        }
+
+        // compute a single app's total in hours from its hour/minute inputs
+        function computeApp(app) {
+            const h = getVal(app + '_hours');
+            const m = getVal(app + '_mins');
+            const total = h + m / 60;
+            const hidden = document.getElementById(app + '_total');
+            if (hidden) hidden.value = total.toFixed(3);
+            return total;
+        }
+
+        function updateTotals() {
+            const screen = getVal('screen');
+            let socialSum = 0;
+            ['instagram','whatsapp','facebook','twitter'].forEach(app => socialSum += computeApp(app));
+            document.getElementById('social_total').value = socialSum.toFixed(1);
+            document.getElementById('social_percent').value = screen > 0 ? (socialSum / screen * 100).toFixed(1) + '%' : '0.0%';
+
+            let gameSum = 0;
+            ['pubg','freefire','cod','othergames'].forEach(app => gameSum += computeApp(app));
+            document.getElementById('gaming_total').value = gameSum.toFixed(1);
+            document.getElementById('gaming_percent').value = screen > 0 ? (gameSum / screen * 100).toFixed(1) + '%' : '0.0%';
+        }
+
+        function toggleSection(checkboxId, sectionId, apps) {
+            const chk = document.getElementById(checkboxId);
+            const sec = document.getElementById(sectionId);
+            if (!chk || !sec) return;
+            chk.addEventListener('change', () => {
+                sec.style.display = chk.checked ? 'block' : 'none';
+                if (!chk.checked) {
+                    // clear inputs when hidden
+                    apps.forEach(app => {
+                        const h = document.getElementById(app + '_hours');
+                        const m = document.getElementById(app + '_mins');
+                        if (h) h.value = '';
+                        if (m) m.value = '';
+                    });
+                    updateTotals();
+                }
+            });
+        }
+
+        function splitAndSet(app, total) {
+            const hoursEl = document.getElementById(app + '_hours');
+            const minsEl = document.getElementById(app + '_mins');
+            if (!hoursEl || !minsEl) return;
+            const h = Math.floor(total);
+            const m = Math.round((total - h) * 60);
+            hoursEl.value = h;
+            minsEl.value = m;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // initialize listeners on all hour/min inputs plus screen
+            const inputs = Array.from(document.querySelectorAll('input[id$="_hours"], input[id$="_mins"], #screen'));
+            inputs.forEach(el => el.addEventListener('input', updateTotals));
+
+            // initialize toggle handlers
+            toggleSection('social_used', 'social_section', ['instagram','whatsapp','facebook','twitter']);
+            toggleSection('game_used', 'game_section', ['pubg','freefire','cod','othergames']);
+
+            // split any existing totals into hour/min fields
+            ['instagram','whatsapp','facebook','twitter','pubg','freefire','cod','othergames'].forEach(app => {
+                const tot = parseFloat(document.getElementById(app + '_total')?.value) || 0;
+                splitAndSet(app, tot);
+            });
+
+            // if any social/gaming value is non-zero, check the corresponding box and show section
+            const socialNonzero = ['instagram','whatsapp','facebook','twitter'].some(app => parseFloat(document.getElementById(app + '_total').value) > 0);
+            if (socialNonzero) {
+                const chk = document.getElementById('social_used');
+                if (chk) { chk.checked = true; document.getElementById('social_section').style.display = 'block'; }
+            }
+            const gameNonzero = ['pubg','freefire','cod','othergames'].some(app => parseFloat(document.getElementById(app + '_total').value) > 0);
+            if (gameNonzero) {
+                const chk = document.getElementById('game_used');
+                if (chk) { chk.checked = true; document.getElementById('game_section').style.display = 'block'; }
+            }
+
+            updateTotals();
+        });
+    </script>
+    </div>
+</body>
+</html>

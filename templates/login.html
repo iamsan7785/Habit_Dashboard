@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HabitCheck AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body class="app-body">
+<div id="particles-js"></div>
+<div class="floating-support">
+    <a class="support-link" href="mailto:support@habitcheck.ai"><span class="material-icons-round">mail</span><span>Contact Us</span></a>
+    <a class="support-link" href="/help"><span class="material-icons-round">help_center</span><span>Help</span></a>
+</div>
+<main class="app-page">
+    <div class="app-shell" style="max-width:760px;">
+        <a href="/" class="app-back-link" data-aos="fade-right"><span class="material-icons-round">arrow_back</span> Back to home</a>
+        <section class="page-hero" data-aos="zoom-in" style="margin-top:16px;">
+            <div class="hero-grid">
+                <div>
+                    <div class="hero-kicker"><span class="material-icons-round">vpn_key</span> Secure access</div>
+                    <h1 class="page-title">Login to your <span class="gradient-text">AI dashboard</span></h1>
+                    <p class="page-subtitle">The same premium visual language from the landing page continues here, so the transition into the app feels seamless.</p>
+                    {% if error %}<div class="help-card" style="margin-top:20px; border-color: rgba(251, 113, 133, 0.35);"><p style="color:#fecdd3;">{{ error }}</p></div>{% endif %}
+                    <form method="POST" action="/login" autocomplete="off" style="margin-top:24px; display:grid; gap:18px;">
+                        <div class="floating-field is-active">
+                            <input type="text" id="user_id" name="user_id" placeholder=" " required autofocus>
+                            <label for="user_id">Firebase User ID</label>
+                            <div class="input-meta"><span>Enter the ID synced from your mobile app</span><span></span></div>
+                        </div>
+                        <button type="submit" class="lp-btn lp-btn-primary lp-btn-full"><span class="material-icons-round">login</span> Login</button>
+                    </form>
+                </div>
+                <div class="hero-visual"><div class="visual-icon"><span class="material-icons-round">shield</span></div><div class="visual-title">Unified experience</div><div class="visual-copy">Consistent fonts, gradients, and glass cards now span home, login, dashboard, inputs, and results.</div><ul class="visual-tags"><li>Secure entry</li><li>Realtime sync</li><li>Modern UI</li></ul></div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="{{ url_for('static', filename='landing.js') }}"></script>
+</body>
+</html>

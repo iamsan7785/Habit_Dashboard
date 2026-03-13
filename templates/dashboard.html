@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HabitCheck AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body class="app-body" data-page="dashboard">
+<div id="particles-js"></div>
+
+<nav class="app-navbar">
+    <div class="app-navbar-inner">
+        <a href="/dashboard" class="app-brand">
+            <span class="material-icons-round">psychology</span>
+            <span>HabitCheck AI</span>
+        </a>
+        <ul class="app-nav-links">
+            <li><a class="active" href="/dashboard">Dashboard</a></li>
+            <li><a href="/sleep">Sleep</a></li>
+            <li><a href="/study">Study</a></li>
+            <li><a href="/stress">Stress</a></li>
+            <li><a href="/overall">Health</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="floating-support">
+    <a class="support-link" href="mailto:support@habitcheck.ai"><span class="material-icons-round">mail</span><span>Contact Us</span></a>
+    <a class="support-link" href="/help"><span class="material-icons-round">help_center</span><span>Help</span></a>
+</div>
+
+<main class="app-page">
+    <div class="app-shell">
+        <section class="page-hero" data-aos="fade-up">
+            <div class="hero-grid">
+                <div>
+                    <div class="hero-kicker"><span class="material-icons-round">auto_awesome</span> Personalized dashboard</div>
+                    <h1 class="page-title">Welcome back, <span class="gradient-text">{{ display_name }}</span></h1>
+                    <p class="page-subtitle">{% if greeting %}{{ greeting }}{% else %}Review your latest AI modules with a cleaner and faster dashboard flow.{% endif %}</p>
+                    <div class="hero-actions">
+                        <a href="/sleep" class="lp-btn lp-btn-primary"><span class="material-icons-round">bedtime</span> Start with Sleep</a>
+                        <a href="/overall" class="lp-btn lp-btn-glass"><span class="material-icons-round">monitor_heart</span> View Health</a>
+                    </div>
+                    <div class="hero-stat-row dashboard-hero-stats">
+                        <div class="metric-card"><div class="metric-label">User</div><div class="metric-value">{{ display_name }}</div></div>
+                        <div class="metric-card"><div class="metric-label">Theme</div><div class="metric-value">Unified UI</div></div>
+                        <div class="metric-card"><div class="metric-label">Models</div><div class="metric-value">4 Available</div></div>
+                    </div>
+                </div>
+                <div class="hero-visual" data-aos="zoom-in" data-aos-delay="120">
+                    <div class="visual-icon"><span class="material-icons-round">dashboard_customize</span></div>
+                    <div class="visual-title">Today’s intelligence hub</div>
+                    <div class="visual-copy">Navigate through quick actions, live predictions, and weekly analytics with improved readability.</div>
+                    <ul class="visual-tags"><li>Overview first</li><li>Smooth transitions</li><li>Clear highlights</li></ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block" data-aos="fade-up" data-aos-delay="80">
+            <div class="section-kicker"><span class="material-icons-round">apps</span> Prediction modules</div>
+            <h2 class="section-title">Quick actions</h2>
+            <p class="section-subtitle">Open any module directly. Prediction features remain unchanged.</p>
+            <div class="option-grid section-space-top">
+                <a class="option-card sleep" href="/sleep"><div class="option-icon"><span class="material-icons-round">bedtime</span></div><h3>Sleep Drift</h3><p>Analyze bedtime behavior, notifications, and recovery signals.</p></a>
+                <a class="option-card study" href="/study"><div class="option-icon"><span class="material-icons-round">menu_book</span></div><h3>Study Drift</h3><p>Track focus time, reading consistency, and digital interruptions.</p></a>
+                <a class="option-card stress" href="/stress"><div class="option-icon"><span class="material-icons-round">psychology_alt</span></div><h3>Stress Level</h3><p>Measure mental load, screen pressure, and heart-rate cues.</p></a>
+                <a class="option-card health" href="/overall"><div class="option-icon"><span class="material-icons-round">monitor_heart</span></div><h3>Overall Health</h3><p>Combine all major signals into one score with a cleaner result view.</p></a>
+            </div>
+        </section>
+
+        <section class="section-block" id="overview" data-aos="fade-up" data-aos-delay="100">
+            <div class="section-kicker"><span class="material-icons-round">insights</span> Overview analytics</div>
+            <h2 class="section-title">Today at a glance</h2>
+            <p class="section-subtitle">Core metrics, AI insights, and risk highlights with improved visual separation.</p>
+
+            <div class="metric-grid section-space-top cards-reveal">
+                <div class="metric-card" id="wellnessCard">
+                    <div class="metric-label">Wellness Score</div>
+                    <div class="progress-ring" id="wellnessRing" aria-label="Wellness progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-inner">
+                            <span id="wellnessScore" class="metric-value">0</span>
+                            <div class="progress-subtext" id="wellnessStatus">Loading…</div>
+                        </div>
+                    </div>
+                    <div class="metric-value metric-breakdown" id="wellnessBreakdown"></div>
+                </div>
+
+                <div class="metric-card" id="futureCard">
+                    <div class="metric-label">Tomorrow prediction</div>
+                    <div class="metric-value" id="futureStressLevel">…</div>
+                    <div class="metric-subtext" id="futureStressProb"></div>
+                    <div class="metric-compact-row metric-mini-grid">
+                        <div class="metric-card metric-mini-card">
+                            <div class="metric-label">Focus Score</div>
+                            <div class="metric-value" id="futureFocus">…</div>
+                        </div>
+                        <div class="metric-card metric-mini-card" id="sleepRiskCard">
+                            <div class="metric-label">Sleep risk</div>
+                            <div class="metric-value" id="futureSleepRisk">…</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="personalityCard">
+                    <div class="metric-label">Digital personality</div>
+                    <div class="metric-value" id="personalityType">Loading…</div>
+                    <div class="metric-subtext personality-copy" id="personalityDescription"></div>
+                </div>
+
+                <div class="metric-card" id="burnoutCard">
+                    <div class="metric-label">Burnout risk</div>
+                    <div class="metric-value" id="burnoutRisk">…</div>
+                    <div class="progress-bar burnout-bar">
+                        <div id="burnoutProgress" class="burnout-progress"></div>
+                    </div>
+                    <div class="metric-subtext burnout-copy" id="burnoutSummary"></div>
+                </div>
+            </div>
+
+            <div class="results-grid section-space-top cards-reveal">
+                <section class="result-panel" id="insightsCard">
+                    <div class="panel-title">AI insights</div>
+                    <p class="panel-subtitle">Actionable pointers generated from recent behavior.</p>
+                    <ul id="insightsList" class="recommendation-list compact-list"></ul>
+                </section>
+                <section class="result-panel" id="patternsCard">
+                    <div class="panel-title">Behavior patterns</div>
+                    <p class="panel-subtitle">Detected correlations in your daily habits.</p>
+                    <ul id="patternsList" class="recommendation-list compact-list"></ul>
+                </section>
+            </div>
+        </section>
+
+        <section class="section-block" id="analytics" data-aos="fade-up" data-aos-delay="120">
+            <div class="section-kicker"><span class="material-icons-round">calendar_month</span> Deep analytics</div>
+            <h2 class="section-title">Weekly performance center</h2>
+            <p class="section-subtitle">Detailed trend visualization moved into a focused section for cleaner scanning.</p>
+
+            <div class="results-grid section-space-top cards-reveal">
+                <section class="result-panel" id="weeklyCard">
+                    <div class="panel-title">Weekly report</div>
+                    <p class="panel-subtitle">A 7-day view of your key habits and their trends.</p>
+                    <div class="metric-grid weekly-top-metrics">
+                        <div class="metric-card">
+                            <div class="metric-label">Avg screen time <span class="trend-icon" id="trendScreen"></span></div>
+                            <div class="metric-value" id="weeklyAvgScreen">–</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg sleep <span class="trend-icon" id="trendSleep"></span></div>
+                            <div class="metric-value" id="weeklyAvgSleep">–</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg steps <span class="trend-icon" id="trendSteps"></span></div>
+                            <div class="metric-value" id="weeklyAvgSteps">–</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg stress <span class="trend-icon" id="trendStress"></span></div>
+                            <div class="metric-value" id="weeklyAvgStress">–</div>
+                        </div>
+                    </div>
+                    <div class="chart-wrap chart-space-top">
+                        <canvas id="weeklyScreenChart" height="160"></canvas>
+                    </div>
+                    <div class="chart-wrap chart-space-top">
+                        <canvas id="weeklyStepsChart" height="160"></canvas>
+                    </div>
+                    <div class="chart-wrap chart-space-top">
+                        <canvas id="weeklySleepChart" height="160"></canvas>
+                    </div>
+                    <div class="chart-wrap chart-space-top">
+                        <canvas id="weeklyStressChart" height="160"></canvas>
+                    </div>
+                </section>
+
+                <section class="result-panel" id="weeklyAnalyticsCard">
+                    <div class="panel-title">Weekly Habit Analytics</div>
+                    <p class="panel-subtitle">Detailed charts and AI insight for the last 7 days.</p>
+                    <div class="chart-wrap weekly-card-chart-top">
+                        <canvas id="combinedWeeklyChart" height="200"></canvas>
+                    </div>
+                    <div class="chart-wrap chart-space-top">
+                        <canvas id="weeklyDonutChart" height="200"></canvas>
+                    </div>
+                    <div class="metric-grid chart-space-top">
+                        <div class="metric-card">
+                            <div class="metric-label">Highest screen time</div>
+                            <div class="metric-value" id="highestScreenDay">–</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Lowest sleep</div>
+                            <div class="metric-value" id="lowestSleepDay">–</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Most active day</div>
+                            <div class="metric-value" id="mostActiveDay">–</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Stress trend</div>
+                            <div class="metric-value" id="stressTrend">–</div>
+                        </div>
+                    </div>
+                    <div id="weeklyInsight" class="weekly-insight-copy"></div>
+                </section>
+
+                <section class="result-panel" id="summaryCard">
+                    <div class="panel-title">Daily AI summary</div>
+                    <p class="panel-subtitle">A simple recap in natural language.</p>
+                    <p id="dailySummary" class="daily-summary-copy"></p>
+                    <div class="hero-actions">
+                        <a href="/results" class="lp-btn lp-btn-glass"><span class="material-icons-round">insights</span> Open Results Page</a>
+                        <a href="/help" class="lp-btn lp-btn-glass"><span class="material-icons-round">help_center</span> Usage Help</a>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <footer class="app-footer"><p>HabitCheck AI now uses one consistent visual system across the entire website.</p></footer>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<!-- Chart.js library for dashboard visualizations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='landing.js') }}"></script>
+</body>
+</html>

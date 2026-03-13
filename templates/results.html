@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - HabitCheck AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body class="app-body" data-page="results">
+<div id="particles-js"></div>
+<nav class="app-navbar"><div class="app-navbar-inner"><a href="/dashboard" class="app-brand"><span class="material-icons-round">psychology</span><span>HabitCheck AI</span></a><ul class="app-nav-links"><li><a href="/dashboard">Dashboard</a></li><li><a href="/sleep">Sleep</a></li><li><a href="/study">Study</a></li><li><a href="/stress">Stress</a></li><li><a href="/overall">Health</a></li><li><a class="active" href="/results">Results</a></li></ul></div></nav>
+<div class="floating-support"><a class="support-link" href="mailto:support@habitcheck.ai"><span class="material-icons-round">mail</span><span>Contact Us</span></a><a class="support-link" href="/help"><span class="material-icons-round">help_center</span><span>Help</span></a></div>
+<main class="app-page"><div class="app-shell results-shell">
+<section id="resultsEmptyState" class="empty-state hidden"><h1 class="page-title">No saved result found</h1><p>Run a prediction from one of the input pages first, then you will be redirected here automatically.</p><div class="results-actions"><a href="/dashboard" class="lp-btn lp-btn-primary"><span class="material-icons-round">arrow_back</span> Go to Dashboard</a></div></section>
+<section id="resultsContent" class="hidden">
+    <div class="result-panel" data-aos="fade-up">
+        <div class="result-hero">
+            <div>
+                <div class="hero-kicker"><span class="material-icons-round">insights</span> Dedicated results page</div>
+                <h1 id="resultsTitle" class="page-title">Prediction Results</h1>
+                <p id="resultsSubtitle" class="page-subtitle"></p>
+                <div class="score-line"><span class="score-badge"><span class="material-icons-round">auto_graph</span><span id="resultsScore"></span></span><span id="resultsCategory" class="category-badge"></span></div>
+                <p id="resultsExplanation" class="page-subtitle"></p>
+                <div class="results-actions"><a id="editInputsLink" href="/dashboard" class="lp-btn lp-btn-glass"><span class="material-icons-round">edit</span> Edit Inputs</a><a href="/dashboard" class="lp-btn lp-btn-primary"><span class="material-icons-round">dashboard</span> Back to Dashboard</a></div>
+                <p id="resultsTimestamp" class="muted-text" style="margin-top:16px;"></p>
+            </div>
+            <div class="result-visual"><div class="visual-icon"><span id="resultsVisualIcon" class="material-icons-round">analytics</span></div><div id="resultsVisualTitle" class="visual-title">Result insight</div><div id="resultsVisualCopy" class="visual-copy"></div><ul class="visual-tags"><li>Modern chart</li><li>Color-matched bars</li><li>Smooth animations</li></ul></div>
+        </div>
+    </div>
+
+    <div class="results-grid">
+        <section class="result-panel chart-card" data-aos="fade-up" data-aos-delay="80"><div class="panel-title">Contribution chart</div><p class="panel-subtitle">Professional doughnut visualization with cleaner contrast and smoother motion.</p><div class="chart-wrap"><canvas id="resultsChart"></canvas></div></section>
+        <section class="result-panel" data-aos="fade-up" data-aos-delay="120"><div class="panel-title">Breakdown</div><p class="panel-subtitle">Each progress bar matches its corresponding chart category color.</p><div id="breakdownList" class="breakdown-list"></div></section>
+    </div>
+
+    <div class="results-grid">
+        <section class="result-panel" data-aos="fade-up" data-aos-delay="150"><div class="panel-title">Input highlights</div><p class="panel-subtitle">Input values are summarized here with display-only time conversion where needed.</p><div id="quickFacts" class="quick-facts-grid"></div></section>
+        <section class="result-panel" data-aos="fade-up" data-aos-delay="190"><div class="panel-title">Recommendations</div><p class="panel-subtitle">Actionable guidance is preserved from the model output.</p><ul id="recommendationList" class="recommendation-list"></ul></section>
+    </div>
+</section>
+</div></main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="{{ url_for('static', filename='landing.js') }}"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

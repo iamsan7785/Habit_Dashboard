@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Prediction System</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <!-- AOS scroll animations -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Landing page styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+</head>
+<body>
+
+<!-- ── PARTICLES BACKGROUND ── -->
+<div id="particles-js"></div>
+
+<!-- ── NAVBAR ── -->
+<nav class="lp-navbar" id="navbar">
+    <div class="lp-nav-inner">
+        <a href="/" class="lp-logo">
+            <span class="lp-logo-icon material-icons-round">psychology</span>
+            <span class="lp-logo-text">AI Health</span>
+        </a>
+        <ul class="lp-nav-links" id="navLinks">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#dashboard-preview">Dashboard</a></li>
+            <li><a href="#login-section">Login</a></li>
+        </ul>
+        <button class="lp-hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lp-hero" id="hero">
+    <!-- Lottie AI brain animation -->
+    <div class="lp-hero-lottie">
+        <lottie-player
+            src="https://lottie.host/0c8aa78a-658c-4918-8750-2e3120b54e8f/v2P5i2F16E.json"
+            background="transparent"
+            speed="1"
+            loop autoplay>
+        </lottie-player>
+    </div>
+
+    <div class="lp-hero-content" data-aos="fade-up" data-aos-duration="1000">
+        <h1 class="lp-hero-title">AI Health Prediction<br><span class="gradient-text">System</span></h1>
+        <p class="lp-hero-subtitle">Analyze Your Lifestyle With Machine Learning</p>
+        <p class="lp-hero-desc">
+            Our AI platform collects lifestyle data — step count, screen time, sleep duration &amp; more —
+            from your Android device, and uses advanced ML models to predict stress, sleep quality
+            and study productivity in real time.
+        </p>
+        <div class="lp-hero-btns">
+            <a href="#how-it-works" class="lp-btn lp-btn-primary">
+                <span class="material-icons-round">explore</span> Explore Features
+            </a>
+            <a href="#login-section" class="lp-btn lp-btn-outline">
+                <span class="material-icons-round">login</span> Login
+            </a>
+            <a href="#download" class="lp-btn lp-btn-glass">
+                <span class="material-icons-round">download</span> Download App
+            </a>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="lp-scroll-indicator">
+        <div class="lp-mouse"><div class="lp-mouse-wheel"></div></div>
+        <span>Scroll Down</span>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HOW OUR SYSTEM WORKS
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lp-section" id="how-it-works">
+    <h2 class="lp-section-title" data-aos="fade-up">How Our System Works</h2>
+    <p class="lp-section-sub" data-aos="fade-up" data-aos-delay="100">Three intelligent stages from raw data to actionable health insight.</p>
+
+    <div class="lp-cards-row">
+        <!-- Card 1 -->
+        <div class="lp-glass-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="lp-card-icon-wrap">
+                <span class="material-icons-round">phone_android</span>
+            </div>
+            <h3>Data Collection</h3>
+            <p>Our Android app silently tracks step count, screen time, sleep duration, notification frequency &amp; calories via Google Fit API and usage stats.</p>
+            <ul class="lp-card-tags">
+                <li>Steps</li><li>Screen Time</li><li>Sleep</li><li>Notifications</li>
+            </ul>
+        </div>
+        <!-- Card 2 -->
+        <div class="lp-glass-card" data-aos="fade-up" data-aos-delay="350">
+            <div class="lp-card-icon-wrap accent-purple">
+                <span class="material-icons-round">model_training</span>
+            </div>
+            <h3>AI Analysis</h3>
+            <p>Data is synced to Firebase and processed by our Flask backend. Gradient Boosting and neural-network models evaluate behavioural patterns instantly.</p>
+            <ul class="lp-card-tags">
+                <li>ML Models</li><li>Firebase</li><li>Flask</li><li>Real-Time</li>
+            </ul>
+        </div>
+        <!-- Card 3 -->
+        <div class="lp-glass-card" data-aos="fade-up" data-aos-delay="500">
+            <div class="lp-card-icon-wrap accent-pink">
+                <span class="material-icons-round">analytics</span>
+            </div>
+            <h3>Prediction Results</h3>
+            <p>Get clear predictions for stress level, sleep quality and study productivity with contribution breakdowns and personalised recommendations.</p>
+            <ul class="lp-card-tags">
+                <li>Stress</li><li>Sleep Quality</li><li>Productivity</li><li>Health Score</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DASHBOARD PREVIEW – ANIMATED COUNTERS
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lp-section lp-section-dark" id="dashboard-preview">
+    <h2 class="lp-section-title" data-aos="fade-up">Dashboard Preview</h2>
+    <p class="lp-section-sub" data-aos="fade-up" data-aos-delay="100">A glimpse at the real-time metrics our AI monitors.</p>
+
+    <div class="lp-counters-grid">
+        <div class="lp-counter-card" data-aos="zoom-in" data-aos-delay="150">
+            <span class="material-icons-round lp-counter-icon">directions_walk</span>
+            <div class="lp-counter-num" data-target="8742">0</div>
+            <span class="lp-counter-label">Steps Today</span>
+        </div>
+        <div class="lp-counter-card" data-aos="zoom-in" data-aos-delay="300">
+            <span class="material-icons-round lp-counter-icon" style="color:#a78bfa;">bedtime</span>
+            <div class="lp-counter-num" data-target="7" data-suffix="h">0</div>
+            <span class="lp-counter-label">Sleep Duration</span>
+        </div>
+        <div class="lp-counter-card" data-aos="zoom-in" data-aos-delay="450">
+            <span class="material-icons-round lp-counter-icon" style="color:#f472b6;">smartphone</span>
+            <div class="lp-counter-num" data-target="4" data-suffix="h">0</div>
+            <span class="lp-counter-label">Screen Time</span>
+        </div>
+        <div class="lp-counter-card" data-aos="zoom-in" data-aos-delay="600">
+            <span class="material-icons-round lp-counter-icon" style="color:#fbbf24;">self_improvement</span>
+            <div class="lp-counter-num" data-target="32" data-suffix="%">0</div>
+            <span class="lp-counter-label">Stress Level</span>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TECH STACK MARQUEE
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lp-section" id="tech">
+    <h2 class="lp-section-title" data-aos="fade-up">Powered By</h2>
+    <div class="lp-tech-marquee" data-aos="fade-up" data-aos-delay="200">
+        <div class="lp-marquee-track">
+            <span>Python</span><span>Flask</span><span>Firebase</span><span>Scikit-Learn</span>
+            <span>XGBoost</span><span>Google Fit API</span><span>Android</span><span>TensorFlow</span>
+            <span>Python</span><span>Flask</span><span>Firebase</span><span>Scikit-Learn</span>
+            <span>XGBoost</span><span>Google Fit API</span><span>Android</span><span>TensorFlow</span>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LOGIN SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lp-section lp-section-dark" id="login-section">
+    <h2 class="lp-section-title" data-aos="fade-up">Access Your Dashboard</h2>
+    <p class="lp-section-sub" data-aos="fade-up" data-aos-delay="100">Enter your Firebase User ID to unlock personalised AI predictions.</p>
+
+    <div class="lp-login-glass" data-aos="zoom-in" data-aos-delay="250">
+        <div class="lp-login-glow"></div>
+        <form method="POST" action="/login" class="lp-login-form" autocomplete="off">
+            <div class="lp-input-group">
+                <span class="material-icons-round">person</span>
+                <input type="text" name="user_id" id="lp_user_id" placeholder="Enter User ID" required>
+            </div>
+            <button type="submit" class="lp-btn lp-btn-primary lp-btn-full">
+                <span class="material-icons-round">login</span> Login
+            </button>
+        </form>
+        <p class="lp-login-hint">Don't have an account? <a href="#download">Download the app</a> first.</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DOWNLOAD SECTION
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lp-section" id="download">
+    <h2 class="lp-section-title" data-aos="fade-up">Get The Mobile App</h2>
+    <p class="lp-section-sub" data-aos="fade-up" data-aos-delay="100">Start tracking your habits automatically on Android.</p>
+
+    <div class="lp-download-wrap" data-aos="fade-up" data-aos-delay="250">
+        <a href="#" class="lp-btn lp-btn-primary lp-btn-lg">
+            <span class="material-icons-round">android</span> Download APK
+        </a>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════ -->
+<footer class="lp-footer">
+    <div class="lp-footer-inner">
+        <div class="lp-footer-brand">
+            <span class="material-icons-round">psychology</span>
+            <span>AI Health Prediction System</span>
+        </div>
+        <p>AI-powered platform that helps students monitor their health before problems arise.</p>
+        <div class="lp-footer-links">
+            <a href="#hero">Home</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#dashboard-preview">Dashboard</a>
+            <a href="#login-section">Login</a>
+            <a href="/help">Help</a>
+        </div>
+        <p class="lp-footer-copy">&copy; 2026 AI Health Prediction System. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- ── SCRIPTS ── -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js"></script>
+<script src="{{ url_for('static', filename='landing.js') }}"></script>
+
+</body>
+</html>
