@@ -1,0 +1,691 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color: white;
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+
+.navbar{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+}
+
+.logo{
+    font-weight: 700;
+    font-size: 22px;
+    color: #00ffcc;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin-left: auto;
+    align-items: center;
+}
+
+/* utility area next to navbar-links (contact/help) */
+.nav-utility {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.help-btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+}
+
+.help-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* result / analysis components */
+.result-box {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.result-box h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #00c9a7;
+}
+
+.contributions-list {
+    list-style: none;
+    padding: 0;
+}
+
+.contributions-list li {
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.recommendations {
+    margin-top: 20px;
+}
+
+.recommendations h4 {
+    margin-bottom: 8px;
+}
+
+.recommendations ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.chart-container {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 20px auto;
+}
+
+/* status text colors used for result scores */
+.status-great { color: #28a745; }
+.status-good { color: #2eb86e; }
+.status-normal { color: #ffc107; }
+.status-moderate { color: #ff9800; }
+.status-bad { color: #e53935; }
+/* stress level colors reuse low/medium/high names */
+.status-low { color: #28a745; }
+.status-medium { color: #ff9800; }
+.status-high { color: #e53935; }
+
+.navbar-links a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.8);
+    transition: color 0.3s;
+    font-size: 15px;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+    color: #00ffcc;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn-primary {
+    background: #00c9a7;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+    background: #00b396;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,201,167,0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.btn-outline:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: #00ffcc;
+    color: #00ffcc;
+}
+
+/* form element spacing */
+input[type="number"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 12px;
+    background: linear-gradient(
+        45deg,
+        #ff005a,
+        #fffd37,
+        #00ff9f,
+        #37dfff,
+        #7f00ff,
+        #ff005a
+    );
+    background-size: 300% 300%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow 8s ease infinite;
+}
+
+@keyframes rainbow {
+    0%,100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+.hero-tagline {
+    font-size: 20px;
+    font-weight: 600;
+    color: #00ffcc;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    font-size: 17px;
+    margin-bottom: 30px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.7;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.hero-buttons button,
+.hero-buttons a {
+    margin: 5px;
+}
+
+/* ============================================================
+   FEATURES / INFO SECTION
+   ============================================================ */
+
+.info-section {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    padding: 50px 20px;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    background: white;
+    color: #333;
+    padding: 30px 26px;
+    border-radius: 15px;
+    width: 260px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.25);
+}
+
+.info-box h2 {
+    margin-bottom: 14px;
+    font-size: 18px;
+    color: #0f2027;
+}
+
+.info-box ul {
+    list-style: none;
+    text-align: left;
+}
+
+.info-box li {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #555;
+    padding-left: 18px;
+    position: relative;
+}
+
+.info-box li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #00c9a7;
+    font-weight: 700;
+}
+
+.feature-icon {
+    font-size: 38px;
+    margin-bottom: 14px;
+}
+
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+
+.how-it-works {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.how-it-works h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.step {
+    background: rgba(0,201,167,0.15);
+    border: 1px solid rgba(0,201,167,0.35);
+    padding: 20px 28px;
+    border-radius: 14px;
+    text-align: center;
+    min-width: 170px;
+    transition: transform 0.25s;
+}
+
+.step:hover {
+    transform: translateY(-4px);
+}
+
+.step-number {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 50%;
+    background: #00c9a7;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.step span {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ============================================================
+   DOWNLOAD SECTION
+   ============================================================ */
+
+.download-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(0,201,167,0.06);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.download-section h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.download-section p {
+    color: rgba(255,255,255,0.75);
+    font-size: 16px;
+}
+
+/* ============================================================
+   DASHBOARD OPTION CARDS
+   ============================================================ */
+
+.dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 50px 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    color: #333;
+    padding: 28px 22px;
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.card button {
+    padding: 8px 15px;
+    border: none;
+    background: #00c9a7;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.card button:hover {
+    background: #00b396;
+}
+
+.option-card {
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.3s;
+}
+
+.option-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0,201,167,0.25);
+}
+
+.option-card h3 {
+    margin-bottom: 8px;
+    color: #0f2027;
+    font-size: 18px;
+}
+
+.option-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 14px;
+}
+
+/* ============================================================
+   PROGRESS BARS (generic)
+   ============================================================ */
+
+.progress {
+    background: #eee;
+    border-radius: 20px;
+    margin: 15px 0;
+    height: 10px;
+}
+
+.progress-bar {
+    height: 10px;
+    background: #00c9a7;
+    border-radius: 20px;
+}
+
+.progress-bar.green  { background: #28a745; }
+.progress-bar.orange { background: #ff9800; }
+.progress-bar.red    { background: #e53935; }
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+
+.login-container {
+    max-width: 420px;
+    margin: 0 auto 60px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 18px;
+    padding: 40px 36px;
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    background: linear-gradient(45deg, #00ffcc, #37dfff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.login-container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+}
+
+.login-container input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+}
+
+.login-container input[type="text"]::placeholder {
+    color: rgba(255,255,255,0.35);
+}
+
+.login-container input[type="text"]:focus {
+    border-color: #00ffcc;
+}
+
+.login-error {
+    background: rgba(255,107,107,0.15);
+    border: 1px solid rgba(255,107,107,0.4);
+    color: #ff6b6b;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* ============================================================
+   PREDICTION FORM PAGES
+   ============================================================ */
+
+.form-container {
+    max-width: 560px;
+    margin: 40px auto 60px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 18px;
+    padding: 40px 36px;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 6px;
+    font-size: 26px;
+    background: linear-gradient(45deg, #00ffcc, #37dfff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.form-subtitle {
+    text-align: center;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 28px;
+    font-size: 14px;
+}
+
+.form-container label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+}
+
+.form-container input[type="number"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-container input[type="number"]::placeholder {
+    color: rgba(255,255,255,0.35);
+}
+
+.form-container input[type="number"]:focus {
+    border-color: #00ffcc;
+}
+
+.predict-btn {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00c9a7, #00b4d8);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.predict-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,201,167,0.45);
+}
+
+/* Result display box */
+.result-box {
+    margin-top: 28px;
+    padding: 22px 20px;
+    text-align: center;
+    border-radius: 14px;
+    background: rgba(0,201,167,0.12);
+    border: 1px solid rgba(0,201,167,0.35);
+}
+
+.result-label {
+    display: block;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.result-value {
+    display: block;
+    font-size: 42px;
+    font-weight: 700;
+    color: #00ffcc;
+}
+
+.result-box .error {
+    color: #ff6b6b;
+    font-size: 15px;
+}
+
+/* Readonly inputs (auto-filled from Firebase) */
+.form-container input[readonly] {
+    background: rgba(255,255,255,0.04);
+    color: #00ffcc;
+    font-weight: 600;
+    cursor: default;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+footer {
+    text-align: center;
+    padding: 50px 20px;
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+}
+
+footer p {
+    margin: 4px 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+    .navbar {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 20px;
+    }
+
+    .navbar-links {
+        gap: 14px;
+    }
+
+    .info-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .steps {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard {
+        flex-direction: column;
+        align-items: center;
+    }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Prediction - HabitCheck AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+    <style>
+        .prediction-layout {
+            display: flex;
+            justify-content: center;
+        }
+        .prediction-layout .panel:first-child {
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .submit-helper {
+            text-align: center;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="app-body">
+<div id="particles-js"></div>
+<nav class="app-navbar"><div class="app-navbar-inner"><a href="/dashboard" class="app-brand"><span class="material-icons-round">psychology</span><span>HabitCheck AI</span></a><ul class="app-nav-links"><li><a href="/dashboard">Dashboard</a></li><li><a class="active" href="/sleep">Sleep</a></li><li><a href="/study">Study</a></li><li><a href="/stress">Stress</a></li><li><a href="/overall">Health</a></li><li><a href="/results?model=sleep">Results</a></li></ul></div></nav>
+<div class="floating-support"><a class="support-link" href="mailto:support@habitcheck.ai"><span class="material-icons-round">mail</span><span>Contact Us</span></a><a class="support-link" href="/help"><span class="material-icons-round">help_center</span><span>Help</span></a></div>
+<main class="app-page"><div class="app-shell">
+<section class="page-hero" data-aos="fade-up"><div class="hero-grid"><div><div class="hero-kicker"><span class="material-icons-round">bedtime</span> Sleep drift module</div><h1 class="page-title"><span class="gradient-text">Sleep prediction</span></h1><p class="page-subtitle">Enter your sleep related habits to evaluate your sleep quality and recovery level. Small changes in screen time, interruptions, and deep sleep can significantly affect your score.</p></div><div class="hero-visual"><div class="visual-icon"><span class="material-icons-round">nightlight</span></div><div class="visual-title">Rest & recovery</div><div class="visual-copy">This analysis focuses on how well your body recovers during sleep. Key factors include sleep duration, deep sleep, and night-time disturbences.</div><ul class="visual-tags"><li>Sleep hours</li><li>Notifications</li><li>Heart rate</li></ul></div></div></section>
+<section class="prediction-layout"><div class="panel" data-aos="fade-up" data-aos-delay="100"><div class="panel-title">Sleep inputs</div><p class="panel-subtitle">Provide your actual daily values. These inputs directly impact your sleep score and recomendations.</p><div id="loadingMsg" class="loading-message">Loading data...</div><form id="sleepForm" class="prediction-form hidden" onsubmit="return false;"><div class="field-grid"><div class="floating-field"><input type="number" id="sleep_hours" name="sleep_hours" step="0.1" placeholder=" "><label for="sleep_hours">Sleep Hours</label><div class="input-meta"><span>Night rest duration</span><span class="input-preview"></span></div></div><div class="floating-field"><input type="number" id="screen_time_before_sleep" name="screen_time_before_sleep" step="1" placeholder=" "><label for="screen_time_before_sleep">Screen Time Before Sleep (minutes)</label><div class="input-meta"><span></span><span class="input-preview"></span></div></div><div class="floating-field"><input type="number" id="notifications_night" name="notifications_night" step="1" placeholder=" "><label for="notifications_night">Night Notifications</label><div class="input-meta"><span>Late-night interruptions</span><span class="input-preview"></span></div></div><div class="floating-field"><input type="number" id="heart_rate" name="heart_rate" step="1" placeholder=" "><label for="heart_rate">Heart Rate</label><div class="input-meta"><span>Beats per minute</span><span class="input-preview"></span></div></div><div class="floating-field"><input type="number" id="steps_today" name="steps_today" step="1" placeholder=" "><label for="steps_today">Steps Today</label><div class="input-meta"><span>Movement volume</span><span class="input-preview"></span></div></div>
+      <div class="floating-field"><input type="number" id="deep_sleep_hours" name="deep_sleep_hours" step="0.1" placeholder=" "><label for="deep_sleep_hours">Deep Sleep Hours</label><div class="input-meta"><span>Deep restorative sleep</span><span class="input-preview"></span></div></div>
+    <div class="floating-field"><input type="number" id="night_phone_usage" name="night_phone_usage" step="0.1" placeholder=" "><label for="night_phone_usage">Night Phone Usage (minutes)</label><div class="input-meta"><span></span><span class="input-preview"></span></div></div>
+      <div class="floating-field"><input type="number" id="sleep_interruption" name="sleep_interruption" step="1" placeholder=" "><label for="sleep_interruption">Sleep Interruptions</label><div class="input-meta"><span>Wake-ups per night</span><span class="input-preview"></span></div></div>
+    <div class="floating-field"><input type="number" id="wake_time" name="wake_time" step="0.1" placeholder=" "><label for="wake_time">Wake Time</label><div class="input-meta"><span></span><span class="input-preview"></span></div></div>
+      <div class="floating-field"><input type="number" id="noise_level" name="noise_level" min="0" max="10" step="1" placeholder=" "><label for="noise_level">Noise Level (0-10)</label><div class="input-meta"><span>Sleep environment noise</span><span class="input-preview"></span></div></div>
+    <div class="floating-field"><input type="number" id="ambient_light_level" name="ambient_light_level" min="0" max="10" step="1" placeholder=" "><label for="ambient_light_level">Ambient Light Level (0-10)</label><div class="input-meta"><span>Light in the room</span><span class="input-preview"></span></div></div></div><div class="button-container"><button type="button" class="lp-btn lp-btn-primary" onclick="submitSleep()"><span class="material-icons-round">analytics</span> View Result</button></div><p id="sleepStatus" class="submit-helper form-note">Your result will show sleep quality score, key contributing factors, and improvement suggestions.</p></form></div></section>
+</div></main>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="{{ url_for('static', filename='landing.js') }}"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>document.addEventListener("DOMContentLoaded", () => initPredictionPage("sleep"));</script>
+</body>
+</html>

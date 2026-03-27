@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Habit & Health</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Habit & Health</div>
+    <ul class="nav-links">
+        <li><a href="/dashboard" style="color:#00ffcc;">Dashboard</a></li>
+        <li><a href="/logout" style="color:#f6f2f1;">Logout</a></li>
+    </ul>
+</nav>
+
+<!-- WELCOME -->
+<section class="hero" style="padding-bottom:20px;">
+    <h1>Welcome, {{ user_id }}</h1>
+    <p>Your latest health data has been loaded from Firebase.<br>
+       Choose a model below to run a prediction.</p>
+</section>
+
+<!-- OPTION CARDS -->
+<section class="dashboard" style="padding-top:10px;">
+    <div class="card option-card" onclick="location.href='/sleep'">
+        <h3>Check Sleep Drift</h3>
+        <p>Analyse your sleep quality score based on recent data.</p>
+        <button class="btn-primary">Open</button>
+    </div>
+
+    <div class="card option-card" onclick="location.href='/study'">
+        <h3>Check Study Drift</h3>
+        <p>Evaluate your study productivity from screen usage patterns.</p>
+        <button class="btn-primary">Open</button>
+    </div>
+
+    <div class="card option-card" onclick="location.href='/stress'">
+        <h3>Check Stress Level</h3>
+        <p>Predict stress level (Low / Medium / High) from daily habits.</p>
+        <button class="btn-primary">Open</button>
+    </div>
+
+    <div class="card option-card" onclick="location.href='/overall'">
+        <h3>Check Overall Health</h3>
+        <p>Get a comprehensive health score combining all metrics.</p>
+        <button class="btn-primary">Open</button>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>AI-powered system that helps students monitor their health before problems arise.</p>
+    <p>&copy; 2026 AI Habit & Health. All rights reserved.</p>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

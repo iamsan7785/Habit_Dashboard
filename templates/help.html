@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - HabitCheck AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body class="app-body">
+<div id="particles-js"></div>
+<nav class="app-navbar"><div class="app-navbar-inner"><a href="/dashboard" class="app-brand"><span class="material-icons-round">psychology</span><span>HabitCheck AI</span></a><ul class="app-nav-links"><li><a href="/dashboard">Dashboard</a></li><li><a class="active" href="/help">Help</a></li><li><a href="/logout">Logout</a></li></ul></div></nav>
+<div class="floating-support"><a class="support-link" href="mailto:support@habitcheck.ai"><span class="material-icons-round">mail</span><span>Contact Us</span></a><a class="support-link" href="/help"><span class="material-icons-round">help_center</span><span>Help</span></a></div>
+<main class="app-page"><div class="app-shell">
+<section class="page-hero" data-aos="fade-up"><div class="hero-grid"><div><div class="hero-kicker"><span class="material-icons-round">support_agent</span> Help center</div><h1 class="page-title">Need help using <span class="gradient-text">HabitCheck AI</span>?</h1><p class="page-subtitle">This page now matches the rest of the product with the same theme, typography, and glass cards.</p></div><div class="hero-visual"><div class="visual-icon"><span class="material-icons-round">contact_support</span></div><div class="visual-title">Quick guidance</div><div class="visual-copy">Use these steps to move smoothly from dashboard to inputs and then to the new results page.</div></div></div></section>
+<section class="help-grid" data-aos="fade-up" data-aos-delay="100"><div class="help-card"><h3>How to run a prediction</h3><ol><li>Open a module from the dashboard.</li><li>Review the auto-filled values pulled from your latest health data.</li><li>Edit any input you want. Helper text updates in real time while typing.</li><li>Submit the form to move to the results page.</li><li>Review the chart, color-matched breakdown bars, and recommendations.</li></ol></div><div class="help-card"><h3>Display improvements</h3><ul><li>Screen-based durations are previewed as human-readable hour/minute text in the UI.</li><li>Floating labels keep the forms compact and responsive.</li><li>The Help and Contact actions now sit in a movable corner utility area controlled by CSS.</li></ul></div><div class="help-card"><h3>Need support?</h3><p>If you face issues with predictions, login, or navigation, contact <a class="app-inline-link" href="mailto:support@habitcheck.ai" style="color:#00d4ff;">support@habitcheck.ai</a>.</p></div></section>
+</div></main>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="{{ url_for('static', filename='landing.js') }}"></script>
+</body>
+</html>
