@@ -32,6 +32,8 @@ from datetime import datetime
 from functools import wraps
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for, make_response, send_from_directory
 
+logging.basicConfig(level=logging.INFO)
+
 # ---------------------------------------------------------------------------
 # Path setup — templates & static live one level above backend/
 # ---------------------------------------------------------------------------
@@ -45,6 +47,7 @@ from backend.firebase_connection import (
     FirebaseConnectionError,
     get_latest_health_data,
     get_recent_health_data,
+    _normalize_user_id,
     verify_user,
 )
 from backend.predictions import (
@@ -72,7 +75,6 @@ app = Flask(
     template_folder=os.path.join(_PROJECT_ROOT, 'templates'),
     static_folder=os.path.join(_PROJECT_ROOT, 'static'),
 )
-logging.basicConfig(level=logging.INFO)
 app.secret_key = 'habit_dashboard_secret_key_2026'
 
 
@@ -127,20 +129,36 @@ def login_page():
 @app.route('/login', methods=['POST'])
 def do_login():
     """Process login: validate user_id via Firebase, store in session."""
-    user_id = (
+    logging.info(
+        'Incoming login request | method=%s | path=%s | remote_addr=%s | user_agent=%s',
+        request.method,
+        request.path,
+        request.headers.get('X-Forwarded-For', request.remote_addr),
+        request.headers.get('User-Agent'),
+    )
+    raw_user_id = (
         request.form.get('user_id')
         or (request.get_json(silent=True) or {}).get('user_id')
     )
+    user_id = _normalize_user_id(raw_user_id) if raw_user_id is not None else ''
+    logging.info('Login attempt received | raw_user_id=%r | normalized_user_id=%r', raw_user_id, user_id)
+
     if not user_id:
         return render_template('login.html', error='Please enter a User ID.')
 
     try:
         if not verify_user(user_id):
+            logging.info('Firebase lookup returned no user for user_id=%s', user_id)
             return render_template('login.html', error=f'User "{user_id}" not found in database.')
     except FirebaseConnectionError as exc:
+        logging.exception('Firebase login lookup failed for user_id=%s', user_id)
         return render_template('login.html', error=str(exc)), 503
+    except Exception:
+        logging.exception('Unexpected login failure for user_id=%s', user_id)
+        raise
 
     session['user_id'] = user_id
+    logging.info('Login succeeded for user_id=%s', user_id)
     return redirect(url_for('dashboard_page'))
 
 

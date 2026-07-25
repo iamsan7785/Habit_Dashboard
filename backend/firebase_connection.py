@@ -12,16 +12,54 @@ Usage:
     from firebase_connection import get_latest_health_data, verify_user
 """
 
+import json
+import logging
 import os
 
 import firebase_admin
 from firebase_admin import credentials, db as firebase_db
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Initialise Firebase Admin SDK (runs once on import)
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _KEY_PATH = os.path.join(_PROJECT_ROOT, 'firebase_key.json')
+_DEFAULT_DATABASE_URL = 'https://habitcheckapp-2ee93-default-rtdb.firebaseio.com/'
+
+
+def _normalize_user_id(user_id: str) -> str:
+    """Normalize a Firebase user ID without changing its case."""
+    return str(user_id).strip()
+
+
+def _load_firebase_credentials() -> tuple[str, object]:
+    """Load Firebase credentials from Render env vars or the bundled key file."""
+    env_json = (
+        os.getenv('FIREBASE_SERVICE_ACCOUNT_JSON')
+        or os.getenv('FIREBASE_CREDENTIALS_JSON')
+        or os.getenv('FIREBASE_KEY_JSON')
+    )
+    if env_json:
+        return 'environment JSON', json.loads(env_json)
+
+    env_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+    if env_path:
+        return 'GOOGLE_APPLICATION_CREDENTIALS', env_path
+
+    if os.path.exists(_KEY_PATH):
+        return 'bundled firebase_key.json', _KEY_PATH
+
+    raise FileNotFoundError(
+        'No Firebase credentials found. Set FIREBASE_SERVICE_ACCOUNT_JSON, '
+        'FIREBASE_CREDENTIALS_JSON, FIREBASE_KEY_JSON, or '
+        'GOOGLE_APPLICATION_CREDENTIALS.'
+    )
+
+
+def _resolve_database_url() -> str:
+    return os.getenv('FIREBASE_DATABASE_URL', _DEFAULT_DATABASE_URL)
 
 LOCAL_USER_DATA = {
     '6a804b1ecaa99679': {
@@ -41,12 +79,15 @@ LOCAL_USER_DATA = {
 _firebase_init_error = None
 if not firebase_admin._apps:
     try:
-        _cred = credentials.Certificate(_KEY_PATH)
-        firebase_admin.initialize_app(_cred, {
-            'databaseURL': 'https://habitcheckapp-2ee93-default-rtdb.firebaseio.com/'
+        _cred_source, _cred_value = _load_firebase_credentials()
+        _database_url = _resolve_database_url()
+        firebase_admin.initialize_app(credentials.Certificate(_cred_value), {
+            'databaseURL': _database_url,
         })
+        logger.info('Firebase Admin initialized from %s with databaseURL=%s', _cred_source, _database_url)
     except Exception as exc:
         _firebase_init_error = exc
+        logger.exception('Firebase Admin initialization failed')
 
 
 class FirebaseConnectionError(RuntimeError):
@@ -71,10 +112,19 @@ def _friendly_firebase_error(exc: Exception) -> FirebaseConnectionError:
 
 def _get_local_health_data(user_id: str) -> dict | None:
     """Return bundled demo data when Firebase is unavailable."""
-    data = LOCAL_USER_DATA.get(user_id)
+    data = LOCAL_USER_DATA.get(_normalize_user_id(user_id))
     if data is None:
         return None
     return dict(data)
+
+
+def _allow_local_demo_fallback() -> bool:
+    """Only use demo data locally; Render should hit the real Firebase project."""
+    return not bool(os.getenv('RENDER'))
+
+
+def _log_firebase_read(action: str, path: str, user_id: str, result: object) -> None:
+    logger.info('Firebase %s read | path=%s | user_id=%s | result=%s', action, path, user_id, result)
 
 
 # ---------------------------------------------------------------------------
@@ -84,17 +134,28 @@ def _get_local_health_data(user_id: str) -> dict | None:
 def verify_user(user_id: str) -> bool:
     """Return True if the user_id exists under /users in Firebase.
     Uses shallow=True so only keys are downloaded (not the full data tree)."""
+    user_id = _normalize_user_id(user_id)
+    path = f'users/{user_id}'
+
     if _firebase_init_error is not None:
-        return _get_local_health_data(user_id) is not None
+        if _allow_local_demo_fallback():
+            data = _get_local_health_data(user_id)
+            _log_firebase_read('verify_user demo', path, user_id, data)
+            return data is not None
+        raise _friendly_firebase_error(_firebase_init_error)
 
     try:
-        ref = firebase_db.reference(f'users/{user_id}')
+        ref = firebase_db.reference(path)
         result = ref.get(shallow=True)
+        _log_firebase_read('verify_user', path, user_id, result)
         return result is not None
     except Exception as exc:
-        local_data = _get_local_health_data(user_id)
-        if local_data is not None:
-            return True
+        logger.exception('Firebase verify_user failed | path=%s | user_id=%s', path, user_id)
+        if _allow_local_demo_fallback():
+            local_data = _get_local_health_data(user_id)
+            _log_firebase_read('verify_user demo fallback', path, user_id, local_data)
+            if local_data is not None:
+                return True
         raise _friendly_firebase_error(exc) from exc
 
 
@@ -105,14 +166,22 @@ def get_latest_health_data(user_id: str) -> dict | None:
 
     Returns a flat dict with the health fields, or None when no data exists.
     """
+    user_id = _normalize_user_id(user_id)
+    path = f'users/{user_id}/health_data'
+
     if _firebase_init_error is not None:
-        return _get_local_health_data(user_id)
+        if _allow_local_demo_fallback():
+            data = _get_local_health_data(user_id)
+            _log_firebase_read('get_latest_health_data demo', path, user_id, data)
+            return data
+        raise _friendly_firebase_error(_firebase_init_error)
 
     try:
-        ref = firebase_db.reference(f'users/{user_id}/health_data')
+        ref = firebase_db.reference(path)
 
         # Fetch only the latest date entry instead of entire history
         snapshot = ref.order_by_key().limit_to_last(1).get()
+        _log_firebase_read('get_latest_health_data', path, user_id, snapshot)
         if not snapshot:
             return None
 
@@ -132,9 +201,12 @@ def get_latest_health_data(user_id: str) -> dict | None:
             'date':               latest_date,
         }
     except Exception as exc:
-        local_data = _get_local_health_data(user_id)
-        if local_data is not None:
-            return local_data
+        logger.exception('Firebase get_latest_health_data failed | path=%s | user_id=%s', path, user_id)
+        if _allow_local_demo_fallback():
+            local_data = _get_local_health_data(user_id)
+            _log_firebase_read('get_latest_health_data demo fallback', path, user_id, local_data)
+            if local_data is not None:
+                return local_data
         raise _friendly_firebase_error(exc) from exc
 
 
@@ -144,16 +216,23 @@ def get_recent_health_data(user_id: str, days: int = 7) -> list[dict]:
     The returned list is sorted oldest first (ascending date) to make it
     easier to render trend charts.
     """
+    user_id = _normalize_user_id(user_id)
+    path = f'users/{user_id}/health_data'
+
     if _firebase_init_error is not None:
-        demo = _get_local_health_data(user_id)
-        if not demo:
-            return []
-        # Repeat demo data for the requested number of days
-        return [dict(demo, date=f"demo_day_{i+1}") for i in range(days)]
+        if _allow_local_demo_fallback():
+            demo = _get_local_health_data(user_id)
+            _log_firebase_read('get_recent_health_data demo', path, user_id, demo)
+            if not demo:
+                return []
+            # Repeat demo data for the requested number of days
+            return [dict(demo, date=f"demo_day_{i+1}") for i in range(days)]
+        raise _friendly_firebase_error(_firebase_init_error)
 
     try:
-        ref = firebase_db.reference(f'users/{user_id}/health_data')
+        ref = firebase_db.reference(path)
         snapshot = ref.order_by_key().limit_to_last(days).get()
+        _log_firebase_read('get_recent_health_data', path, user_id, snapshot)
         if not snapshot:
             return []
 
@@ -166,7 +245,10 @@ def get_recent_health_data(user_id: str, days: int = 7) -> list[dict]:
         return entries
 
     except Exception as exc:
-        local_data = _get_local_health_data(user_id)
-        if local_data is not None:
-            return [dict(local_data, date=f"demo_day_{i+1}") for i in range(days)]
+        logger.exception('Firebase get_recent_health_data failed | path=%s | user_id=%s', path, user_id)
+        if _allow_local_demo_fallback():
+            local_data = _get_local_health_data(user_id)
+            _log_firebase_read('get_recent_health_data demo fallback', path, user_id, local_data)
+            if local_data is not None:
+                return [dict(local_data, date=f"demo_day_{i+1}") for i in range(days)]
         raise _friendly_firebase_error(exc) from exc
