@@ -77,12 +77,23 @@ app = Flask(
 )
 app.secret_key = 'habit_dashboard_secret_key_2026'
 
+ADMIN_LOGIN_ALIAS = 'admin'
+ADMIN_USER_ID = '963a47d2621faa9f'
+
 
 def _disable_cache(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
+
+def _resolve_login_user_id(raw_user_id: str | None) -> tuple[str, str]:
+    """Resolve login aliases to their Firebase user IDs."""
+    normalized = _normalize_user_id(raw_user_id) if raw_user_id is not None else ''
+    if normalized.lower() == ADMIN_LOGIN_ALIAS:
+        return normalized, ADMIN_USER_ID
+    return normalized, normalized
 
 
 # ============================================================================
@@ -140,8 +151,13 @@ def do_login():
         request.form.get('user_id')
         or (request.get_json(silent=True) or {}).get('user_id')
     )
-    user_id = _normalize_user_id(raw_user_id) if raw_user_id is not None else ''
-    logging.info('Login attempt received | raw_user_id=%r | normalized_user_id=%r', raw_user_id, user_id)
+    login_user_id, user_id = _resolve_login_user_id(raw_user_id)
+    logging.info(
+        'Login attempt received | raw_user_id=%r | normalized_user_id=%r | resolved_user_id=%r',
+        raw_user_id,
+        login_user_id,
+        user_id,
+    )
 
     if not user_id:
         return render_template('login.html', error='Please enter a User ID.')
