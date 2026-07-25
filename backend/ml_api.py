@@ -200,8 +200,8 @@ def logout():
 # ============================================================================
 
 USER_DISPLAY = {
-    '6a804b1ecaa99679':{
-        'name': 'Santanu',
+    '963a47d2621faa9f':{
+        'name': 'Santanu(Admin)',
         'greeting': 'We are excited to have you back! Here are your latest insights:',
     },
     '5963bd75800cd9c3':{
