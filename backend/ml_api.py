@@ -79,6 +79,7 @@ app.secret_key = 'habit_dashboard_secret_key_2026'
 
 ADMIN_LOGIN_ALIAS = 'admin'
 ADMIN_USER_ID = '963a47d2621faa9f'
+LOGIN_PASSWORD = '1234'
 
 
 def _disable_cache(response):
@@ -151,16 +152,26 @@ def do_login():
         request.form.get('user_id')
         or (request.get_json(silent=True) or {}).get('user_id')
     )
+    raw_password = (
+        request.form.get('password')
+        or (request.get_json(silent=True) or {}).get('password')
+    )
     login_user_id, user_id = _resolve_login_user_id(raw_user_id)
     logging.info(
-        'Login attempt received | raw_user_id=%r | normalized_user_id=%r | resolved_user_id=%r',
+        'Login attempt received | raw_user_id=%r | normalized_user_id=%r | resolved_user_id=%r | password_received=%s | password_length=%s',
         raw_user_id,
         login_user_id,
         user_id,
+        bool(raw_password),
+        len(raw_password) if raw_password is not None else 0,
     )
 
     if not user_id:
         return render_template('login.html', error='Please enter a User ID.')
+
+    if raw_password != LOGIN_PASSWORD:
+        logging.info('Login rejected for user_id=%s due to invalid password', user_id)
+        return render_template('login.html', error='Invalid password.'), 401
 
     try:
         if not verify_user(user_id):
