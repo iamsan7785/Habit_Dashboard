@@ -18,6 +18,8 @@ Run:
 Flow:
     http://127.0.0.1:5000/           → Landing home page
     http://127.0.0.1:5000/login      → Login page
+    http://127.0.0.1:5000/privacy    → Privacy Policy
+    http://127.0.0.1:5000/terms      → Terms of Service
     http://127.0.0.1:5000/dashboard  → Prediction options (after login)
     http://127.0.0.1:5000/sleep      → Sleep prediction (auto-filled)
     http://127.0.0.1:5000/study      → Study prediction (auto-filled)
@@ -136,6 +138,18 @@ def download_apk():
 def login_page():
     """Show login form."""
     return render_template('login.html')
+
+
+@app.route('/privacy')
+def privacy_page():
+    """Public Privacy Policy page for OAuth consent and user review."""
+    return render_template('privacy.html')
+
+
+@app.route('/terms')
+def terms_page():
+    """Public Terms of Service page for OAuth consent and user review."""
+    return render_template('terms.html')
 
 
 @app.route('/login', methods=['POST'])

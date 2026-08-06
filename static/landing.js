@@ -177,7 +177,88 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ──────────────────────────────────────────────────
-       9. PARALLAX LOTTIE ON SCROLL
+       9. LEGAL DOCUMENT ENHANCEMENTS
+       ────────────────────────────────────────────────── */
+    const tocLinks = document.querySelectorAll("[data-toc-link]");
+    const legalSections = document.querySelectorAll("section[id].legal-section");
+    const legalProgress = document.querySelector("[data-legal-progress]");
+    if (tocLinks.length && legalSections.length) {
+        const setActiveSection = (activeId) => {
+            tocLinks.forEach(link => {
+                const isActive = link.getAttribute("href") === "#" + activeId;
+                link.classList.toggle("active", isActive);
+                if (isActive) {
+                    link.setAttribute("aria-current", "true");
+                } else {
+                    link.removeAttribute("aria-current");
+                }
+            });
+        };
+
+        const legalObserver = new IntersectionObserver((entries) => {
+            const visible = entries
+                .filter(entry => entry.isIntersecting)
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (visible && visible.target && visible.target.id) {
+                setActiveSection(visible.target.id);
+            }
+        }, { rootMargin: "-22% 0px -62% 0px", threshold: [0.08, 0.2, 0.35] });
+
+        legalSections.forEach(section => legalObserver.observe(section));
+        if (window.location.hash) {
+            const initial = document.querySelector(window.location.hash);
+            if (initial && initial.id) setActiveSection(initial.id);
+        } else if (legalSections[0] && legalSections[0].id) {
+            setActiveSection(legalSections[0].id);
+        }
+    }
+
+    if (legalProgress) {
+        const updateLegalProgress = () => {
+            const doc = document.documentElement;
+            const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+            const progress = Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100));
+            legalProgress.style.width = progress + "%";
+        };
+        window.addEventListener("scroll", updateLegalProgress, { passive: true });
+        updateLegalProgress();
+    }
+
+    const copyButtons = document.querySelectorAll("[data-copy-link]");
+    if (copyButtons.length) {
+        copyButtons.forEach(button => {
+            button.addEventListener("click", async () => {
+                const target = button.getAttribute("data-copy-link");
+                if (!target) return;
+                const url = new URL(window.location.href);
+                url.hash = target;
+                try {
+                    await navigator.clipboard.writeText(url.toString());
+                    const original = button.textContent;
+                    button.textContent = "Copied";
+                    button.setAttribute("aria-label", "Copied section link");
+                    setTimeout(() => {
+                        button.textContent = original;
+                        button.removeAttribute("aria-label");
+                    }, 1600);
+                } catch (error) {
+                    window.location.hash = target;
+                }
+            });
+        });
+    }
+
+    const backToTop = document.querySelector("[data-back-to-top]");
+    if (backToTop) {
+        const onScroll = () => {
+            backToTop.classList.toggle("is-visible", window.scrollY > 560);
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+    }
+
+    /* ──────────────────────────────────────────────────
+       10. PARALLAX LOTTIE ON SCROLL
        ────────────────────────────────────────────────── */
     const lottie = document.querySelector(".lp-hero-lottie");
     if (lottie) {
