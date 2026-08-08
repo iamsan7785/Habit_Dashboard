@@ -1,0 +1,11 @@
+{
+  "name": "HabitCheck AI",
+  "short_name": "HabitCheck AI",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050a14",
+  "theme_color": "#050a14",
+  "description": "HabitCheck AI is a wellness dashboard that helps users monitor sleep, stress, and study habits using data from their Android device and machine learning insights.",
+  "icons": []
+}

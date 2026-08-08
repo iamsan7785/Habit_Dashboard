@@ -3,7 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HabitCheck AI</title>
+    <title>HabitCheck AI | Sleep, Stress, and Study Monitoring</title>
+    <meta name="description" content="HabitCheck AI is a wellness dashboard that helps users monitor sleep, stress, and study habits using data from their Android device and machine learning insights.">
+    <meta name="theme-color" content="#050a14">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HabitCheck AI">
+    <meta property="og:description" content="HabitCheck AI is a wellness dashboard that helps users monitor sleep, stress, and study habits using data from their Android device and machine learning insights.">
+    <meta property="og:url" content="https://habitdetector.com/">
+    <meta property="og:site_name" content="HabitCheck AI">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HabitCheck AI">
+    <meta name="twitter:description" content="HabitCheck AI is a wellness dashboard that helps users monitor sleep, stress, and study habits using data from their Android device and machine learning insights.">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "HabitCheck AI",
+        "url": "https://habitdetector.com/",
+        "description": "HabitCheck AI is a wellness dashboard that helps users monitor sleep, stress, and study habits using data from their Android device and machine learning insights."
+    }
+    </script>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -55,12 +75,14 @@
     </div>
 
     <div class="lp-hero-content" data-aos="fade-up" data-aos-duration="1000">
-        <h1 class="lp-hero-title">HabitCheck AI<br><span class="gradient-text">Health Dashboard</span></h1>
-        <p class="lp-hero-subtitle">Monitor sleep, stress, and study habits with machine learning</p>
+        <div class="hero-kicker" style="justify-content:center; margin-bottom:14px;"><span class="material-icons-round">public</span> Public homepage</div>
+        <h1 class="lp-hero-title">HabitCheck AI<br><span class="gradient-text">Sleep, Stress &amp; Study Monitoring</span></h1>
+        <p class="lp-hero-subtitle">HabitCheck AI helps you track wellness habits before you sign in</p>
         <p class="lp-hero-desc">
-            HabitCheck AI is a wellness dashboard that collects lifestyle data — step count, screen time,
-            sleep duration, notifications, and more — from your Android device, then uses machine learning
-            to predict stress, sleep quality, study productivity, and overall health trends.
+            HabitCheck AI is a public wellness app for sleep, stress, and study habit monitoring.
+            It collects lifestyle data — step count, screen time, sleep duration, notifications, and more —
+            from your Android device, then uses machine learning to predict stress, sleep quality,
+            study productivity, and overall health trends.
         </p>
         <p class="lp-hero-desc" style="max-width: 760px; margin-top: -12px; color: rgba(255,255,255,.78);">
             This is a public homepage. You can review what HabitCheck AI does before logging in: it helps you
@@ -71,7 +93,7 @@
                 <span class="material-icons-round">explore</span> Explore Features
             </a>
             <a href="#login-section" class="lp-btn lp-btn-outline">
-                <span class="material-icons-round">login</span> Login
+                <span class="material-icons-round">login</span> Sign In to Dashboard
             </a>
             <a href="#download" class="lp-btn lp-btn-glass">
                 <span class="material-icons-round">download</span> Download App
@@ -296,7 +318,7 @@
             <span class="material-icons-round">psychology</span>
             <span>HabitCheck AI</span>
         </div>
-        <p>HabitCheck AI helps students monitor sleep, stress, and study habits before problems arise.</p>
+        <p>HabitCheck AI helps users monitor sleep, stress, and study habits before problems arise.</p>
         <div class="lp-footer-links">
             <a href="#hero">Home</a>
             <a href="#how-it-works">How It Works</a>
