@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   AI Health Prediction System — Landing Page Scripts
+    HabitCheck AI — Landing Page Scripts
    particles.js · AOS · Animated Counters · Navbar · Smooth Scroll
    ═══════════════════════════════════════════════════════════════ */
 
