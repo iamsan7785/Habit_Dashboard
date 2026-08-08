@@ -130,7 +130,7 @@ def download_apk():
         directory=os.path.join(app.static_folder, 'app'),
         path='HabitCheck.apk',
         as_attachment=True,
-        download_name='HabitCheck.apk',
+        download_name='HabitCheck AI.apk',
     )
 
 

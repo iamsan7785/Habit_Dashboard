@@ -459,7 +459,7 @@ body {
 .lp-footer-brand .material-icons-round { color: #00d4ff; font-size: 28px; }
 .lp-footer p { color: rgba(255,255,255,.4); font-size: 14px; }
 .lp-footer-links {
-    display: flex; justify-content: center; gap: 28px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px;
     margin: 20px 0;
 }
 .lp-footer-links a {
@@ -472,7 +472,7 @@ body {
 /* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .lp-nav-links {
         position: fixed; top: 70px; left: 0; width: 100%;
         background: rgba(5,10,20,.95);
